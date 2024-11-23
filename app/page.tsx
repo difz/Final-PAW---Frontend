@@ -36,7 +36,7 @@ export default function Dashboard() {
 
             return dateB.getTime() - dateA.getTime();
           })
-          .slice(0, 5); 
+          .slice(0, 5); //Ambil 5
 
         setHistoryData(sortedData);
       } catch (error: any) {
