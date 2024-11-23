@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import mongoose from 'mongoose';
+import { NextApiRequest, NextApiResponse } from 'next';
+
 
 export default function Dashboard() {
   return (
@@ -7,7 +10,7 @@ export default function Dashboard() {
       {/* Sidebar */}
       <aside className="w-64 bg-blue-100 p-4">
         <div className="mb-8">
-          <Image src="https://drive.google.com/file/d/108lJAEo0QTPflvZoM4nxeR-l6sT7eBob/view?usp=sharing" alt="Logo" width={50} height={50} />
+          <Image src="https://assets.maia.id/1e81b035-1ab1-47f6-a8ff-fdbb079120e7.png" alt="Logo" width={50} height={50} />
           <h1 className="text-lg font-bold">Money+</h1>
         </div>
         <nav>
