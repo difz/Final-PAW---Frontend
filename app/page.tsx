@@ -1,7 +1,17 @@
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import PlanPopup from "./popups/CreatePlanPopup";
+
 export default function Dashboard() {
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+  const openPopup = () => setIsPopupVisible(true);
+  const closePopup = () => setIsPopupVisible(false);
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
@@ -44,7 +54,7 @@ export default function Dashboard() {
         <header className="mb-8">
           <div className="flex space-x-4">
             {["Pengeluaran", "Pemasukan", "Transfer", "Planning", "Akun"].map((item) => (
-              <button key={item} className="bg-orange-200 px-4 py-2 rounded">
+              <button key={item} className="bg-orange-200 px-4 py-2 rounded" onClick={openPopup}>
                 {item}
               </button>
             ))}
@@ -81,6 +91,7 @@ export default function Dashboard() {
             </div>
           </div>
         </section>
+        {isPopupVisible && <PlanPopup onClose={closePopup} />}
       </main>
     </div>
   );
