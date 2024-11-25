@@ -3,24 +3,22 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import mongoose from 'mongoose';
-import { NextApiRequest, NextApiResponse } from 'next';
-
 
 import PlanPopup from "./popups/CreatePlanPopup";
+import IncomeCategoryChoosePopup from "./popups/PilihKategoriPopup";
 
 export default function Dashboard() {
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isChooseCategoryVisible, setChooseCategoryActive] = useState(false);
 
-  const openPopup = () => setIsPopupVisible(true);
-  const closePopup = () => setIsPopupVisible(false);
+  const openChooseCategory = () => setChooseCategoryActive(true);
+  const closeChooseCategory = () => setChooseCategoryActive(false);
 
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 bg-blue-100 p-4">
         <div className="mb-8">
-          <Image src="https://assets.maia.id/1e81b035-1ab1-47f6-a8ff-fdbb079120e7.png" alt="Logo" width={50} height={50} />
+          <Image src="https://drive.google.com/file/d/108lJAEo0QTPflvZoM4nxeR-l6sT7eBob/view?usp=sharing" alt="Logo" width={50} height={50} />
           <h1 className="text-lg font-bold">Money+</h1>
         </div>
         <nav>
@@ -57,7 +55,7 @@ export default function Dashboard() {
         <header className="mb-8">
           <div className="flex space-x-4">
             {["Pengeluaran", "Pemasukan", "Transfer", "Planning", "Akun"].map((item) => (
-              <button key={item} className="bg-orange-200 px-4 py-2 rounded" onClick={openPopup}>
+              <button key={item} className="bg-orange-200 px-4 py-2 rounded" onClick={openChooseCategory}>
                 {item}
               </button>
             ))}
@@ -94,7 +92,7 @@ export default function Dashboard() {
             </div>
           </div>
         </section>
-        {isPopupVisible && <PlanPopup onClose={closePopup} />}
+        {isChooseCategoryVisible && <IncomeCategoryChoosePopup onClose={closeChooseCategory} />}
       </main>
     </div>
   );

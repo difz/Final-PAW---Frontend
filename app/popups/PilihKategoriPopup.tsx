@@ -1,10 +1,17 @@
 import React, { use } from "react";
 
-interface CategoryChoosePopupProps {
-  onClose: () => void;
+//const CategoryIncome = require('../models/categoryIncome');
+
+interface CategoryIncome {
+  id: string;
+  name: string;
 }
 
-const CategoryChoosePopup: React.FC<CategoryChoosePopupProps> = ({ onClose }) => {
+interface IncomeCategoryChoosePopupProps {
+  onClose: () => CategoryIncome;
+}
+
+const IncomeCategoryChoosePopup: React.FC<IncomeCategoryChoosePopupProps> = ({ onClose }) => {
   return (
     <div style={styles.overlay}>
       <div style={styles.popup}>
@@ -138,4 +145,4 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
 };
 
-export default CategoryChoosePopup;
+export default IncomeCategoryChoosePopup;
