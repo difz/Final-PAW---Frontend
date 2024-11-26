@@ -19,7 +19,7 @@ const BuatAkun: React.FC<BuatAkunProps> = ({ isOpen, onClose }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ accountName, amount: parseFloat(amount) }),
+        body: JSON.stringify({ accountName, amount }),
         credentials: 'include', // Include credentials (cookies)
       });
   

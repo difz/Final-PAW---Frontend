@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import KategoriPemasukan from './kategoriPemasukan';
 
 interface PemasukanProps {
   isOpen: boolean;
@@ -10,20 +11,22 @@ const Pemasukan: React.FC<PemasukanProps> = ({ isOpen, onClose }) => {
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('Makan');
   const [account, setAccount] = useState('Mandiri');
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [categories, setCategories] = useState(['Gaji', 'Freelance', 'Investasi', 'Hadiah']);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+    const value = e.target.value.replace(/[^0-9]/g, '');
     setAmount(formatNumber(value));
   };
 
   const formatNumber = (value: string) => {
-    return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add thousand separators
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
 
   const handleSubmit = async () => {
     const data = {
       name,
-      amount: parseInt(amount.replace(/\./g, ''), 10), // Remove formatting for backend
+      amount: parseInt(amount.replace(/\./g, ''), 10),
       category,
       account,
       type: 'income',
@@ -36,6 +39,7 @@ const Pemasukan: React.FC<PemasukanProps> = ({ isOpen, onClose }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
+        credentials: 'include',
       });
 
       if (response.ok) {
@@ -85,7 +89,7 @@ const Pemasukan: React.FC<PemasukanProps> = ({ isOpen, onClose }) => {
             <span>Kategori</span>
             <div>
               <span>{category}</span>
-              <button className="ml-2 bg-orange-200 px-2 py-1 rounded">Ubah</button>
+              <button onClick={() => setIsCategoryOpen(true)} className="ml-2 bg-orange-200 px-2 py-1 rounded">Ubah</button>
             </div>
           </div>
           <div className="flex justify-between items-center">
@@ -98,6 +102,19 @@ const Pemasukan: React.FC<PemasukanProps> = ({ isOpen, onClose }) => {
         </div>
         <button onClick={handleSubmit} className="mt-6 w-full bg-orange-200 p-2 rounded">Catat Pemasukan</button>
       </div>
+
+      {isCategoryOpen && (
+        <KategoriPemasukan
+          currentCategory={category}
+          categories={categories}
+          onAddCategory={(newCategory) => setCategories([...categories, newCategory])}
+          onSelectCategory={(selectedCategory) => {
+            setCategory(selectedCategory);
+            setIsCategoryOpen(false);
+          }}
+          onClose={() => setIsCategoryOpen(false)}
+        />
+      )}
     </div>
   );
 };

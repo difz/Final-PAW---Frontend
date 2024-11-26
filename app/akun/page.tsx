@@ -3,26 +3,39 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import BuatAkunModal from '../popups/buatAkun'; // Adjust the import path as needed
+import BuatAkun from '../popups/buatAkun'; // Ensure the import path is correct
+
+interface Account {
+  accountName: string;
+  amount: number;
+}
 
 export default function Akun() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [accounts, setAccounts] = useState([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
 
   useEffect(() => {
-    // Fetch accounts from the backend
     const fetchAccounts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/accounts');
+        const response = await fetch('http://localhost:5000/account/all', {
+          credentials: 'include', // Include credentials to send cookies
+        });
+  
         const data = await response.json();
-        setAccounts(data);
+  
+        if (data && Array.isArray(data.accounts)) {
+          setAccounts(data.accounts);
+        } else {
+          console.error('Invalid accounts data:', data);
+        }
       } catch (error) {
         console.error('Error fetching accounts:', error);
       }
     };
-
+  
     fetchAccounts();
   }, []);
+  
 
   return (
     <div className="flex min-h-screen">
@@ -35,7 +48,7 @@ export default function Akun() {
         <nav>
           <ul className="space-y-4">
             <li>
-              <Link href='/'>
+              <Link href='/dashboard'>
                 <span className="cursor-pointer">Dashboard</span>
               </Link>
             </li>
@@ -69,15 +82,19 @@ export default function Akun() {
         </header>
 
         <section className="space-y-4">
-          {accounts.map((account, index) => (
-            <div key={index} className="bg-blue-100 p-4 rounded flex justify-between">
-              <span>{account.name}</span>
-              <span>{`Rp.${account.balance.toLocaleString()}`}</span>
-            </div>
-          ))}
+          {accounts.length > 0 ? (
+            accounts.map((account, index) => (
+              <div key={index} className="bg-blue-100 p-4 rounded flex justify-between">
+                <span>{account.accountName}</span>
+                <span>{`Rp.${account.amount.toLocaleString()}`}</span>
+              </div>
+            ))
+          ) : (
+            <p>No accounts available</p>
+          )}
         </section>
 
-        <BuatAkunModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        <BuatAkun isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </main>
     </div>
   );
