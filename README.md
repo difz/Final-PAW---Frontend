@@ -1,3 +1,7 @@
+
+
+# Next.js Project
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -34,3 +38,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Additional Resources
+
+- Backend Repository: [Financify Backend](https://github.com/difz/Financify-Backend.git)
+- Project Presentation: [Canva Presentation](https://www.canva.com/design/DAGRuLU8kSo/P-5m79sNPlD04lnjYX4low/edit?utm_content=DAGRuLU8kSo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+- Demo Video: [Watch the Demo](https://drive.google.com/file/d/1YWVfx1vu7Eq7F4FhkkRrAovn9E_D4_hQ/view?usp=sharing)
