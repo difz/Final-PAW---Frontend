@@ -41,5 +41,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 - Backend Repository: [Financify Backend](https://github.com/difz/Financify-Backend.git)
 - Project Presentation: [Canva Presentation](https://www.canva.com/design/DAGRuLU8kSo/P-5m79sNPlD04lnjYX4low/edit?utm_content=DAGRuLU8kSo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-- Demo Video: [Watch the Demo](https://drive.google.com/file/d/1YWVfx1vu7Eq7F4FhkkRrAovn9E_D4_hQ/view?usp=sharing)
+- Presentation Video: [Watch the Presentation](https://drive.google.com/drive/folders/14DNFFk0ZjDEds73u13eqp97ANOq3EVzv)
 - Link Web: [Web app](finalpawfe-8ih03wrja-farhanar09s-projects.vercel.app)
