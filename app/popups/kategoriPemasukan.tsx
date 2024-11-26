@@ -5,10 +5,18 @@ interface KategoriPemasukanProps {
   categories: string[];
   onAddCategory: (newCategory: string) => void;
   onSelectCategory: (category: string) => void;
+  onRemoveCategory: (category: string) => void; // Function to remove category
   onClose: () => void;
 }
 
-const KategoriPemasukan: React.FC<KategoriPemasukanProps> = ({ currentCategory, categories, onAddCategory, onSelectCategory, onClose }) => {
+const KategoriPemasukan: React.FC<KategoriPemasukanProps> = ({
+  currentCategory,
+  categories,
+  onAddCategory,
+  onSelectCategory,
+  onRemoveCategory,
+  onClose,
+}) => {
   const [isAddCategoryOpen, setIsAddCategoryOpen] = useState(false);
 
   return (
@@ -20,13 +28,20 @@ const KategoriPemasukan: React.FC<KategoriPemasukanProps> = ({ currentCategory, 
         </div>
         <div className="flex flex-wrap gap-2 mb-4">
           {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => onSelectCategory(cat)}
-              className={`px-4 py-2 rounded ${cat === currentCategory ? 'bg-orange-200' : 'bg-blue-100'}`}
-            >
-              {cat}
-            </button>
+            <div key={cat} className="flex items-center">
+              <button
+                onClick={() => onSelectCategory(cat)}
+                className={`px-4 py-2 rounded ${cat === currentCategory ? 'bg-orange-200' : 'bg-blue-100'}`}
+              >
+                {cat}
+              </button>
+              <button
+                onClick={() => onRemoveCategory(cat)}
+                className="text-red-500 ml-2"
+              >
+                x
+              </button>
+            </div>
           ))}
           <button onClick={() => setIsAddCategoryOpen(true)} className="px-4 py-2 bg-orange-200 rounded">+</button>
         </div>

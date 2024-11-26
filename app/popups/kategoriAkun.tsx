@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
-interface KategoriPengeluaranProps {
+interface KategoriAkunProps {
   currentCategory: string;
   categories: string[];
   onAddCategory: (newCategory: string) => void;
   onSelectCategory: (category: string) => void;
-  onRemoveCategory: (category: string) => void; // Function to remove category
+  onRemoveCategory: (category: string) => void; // Add this line
   onClose: () => void;
 }
 
-const KategoriPengeluaran: React.FC<KategoriPengeluaranProps> = ({
+const KategoriAkun: React.FC<KategoriAkunProps> = ({
   currentCategory,
   categories,
   onAddCategory,
@@ -23,7 +23,7 @@ const KategoriPengeluaran: React.FC<KategoriPengeluaranProps> = ({
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white w-96 p-6 rounded shadow-md">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Pilih Kategori Pemasukan</h2>
+          <h2 className="text-xl font-bold">Pilih Kategori Akun</h2>
           <button onClick={onClose} className="text-red-500">X</button>
         </div>
         <div className="flex flex-wrap gap-2 mb-4">
@@ -91,4 +91,4 @@ const TambahKategori: React.FC<TambahKategoriProps> = ({ onAddCategory, onClose 
   );
 };
 
-export default KategoriPengeluaran;
+export default KategoriAkun;

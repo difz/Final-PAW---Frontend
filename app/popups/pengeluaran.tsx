@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import KategoriPengeluaran from './kategoriPengeluaran';
+import KategoriAkun from './kategoriAkun';
 
 interface PengeluaranProps {
   isOpen: boolean;
@@ -11,8 +12,11 @@ const Pengeluaran: React.FC<PengeluaranProps> = ({ isOpen, onClose }) => {
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('Makan');
   const [account, setAccount] = useState('Mandiri');
+  const [date, setDate] = useState(''); // State untuk tanggal
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [categories, setCategories] = useState(['Makan', 'Hiburan', 'Kesehatan', 'Pendidikan']);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const [categories, setCategories] = useState(['Gaji', 'Freelance', 'Investasi', 'Hadiah']);
+  const [accounts, setAccounts] = useState(['Mandiri', 'BCA', 'BRI', 'GoPay']);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[^0-9]/g, '');
@@ -29,6 +33,7 @@ const Pengeluaran: React.FC<PengeluaranProps> = ({ isOpen, onClose }) => {
       amount: parseInt(amount.replace(/\./g, ''), 10),
       category,
       account,
+      date, // Tambahkan tanggal ke data
       type: 'expense',
     };
 
@@ -47,7 +52,7 @@ const Pengeluaran: React.FC<PengeluaranProps> = ({ isOpen, onClose }) => {
         onClose();
       } else {
         const errorData = await response.json();
-        alert(`Gagal menyimpan pemasukan: ${errorData.message}`);
+        alert(`Gagal menyimpan pengeluaran: ${errorData.message}`);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -86,6 +91,15 @@ const Pengeluaran: React.FC<PengeluaranProps> = ({ isOpen, onClose }) => {
             />
           </div>
           <div className="flex justify-between items-center">
+            <span>Tanggal</span>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="bg-blue-100 p-2 rounded"
+            />
+          </div>
+          <div className="flex justify-between items-center">
             <span>Kategori</span>
             <div>
               <span>{category}</span>
@@ -96,7 +110,7 @@ const Pengeluaran: React.FC<PengeluaranProps> = ({ isOpen, onClose }) => {
             <span>Akun</span>
             <div>
               <span>{account}</span>
-              <button className="ml-2 bg-orange-200 px-2 py-1 rounded">Ubah</button>
+              <button onClick={() => setIsAccountOpen(true)} className="ml-2 bg-orange-200 px-2 py-1 rounded">Ubah</button>
             </div>
           </div>
         </div>
@@ -108,11 +122,26 @@ const Pengeluaran: React.FC<PengeluaranProps> = ({ isOpen, onClose }) => {
           currentCategory={category}
           categories={categories}
           onAddCategory={(newCategory) => setCategories([...categories, newCategory])}
+          onRemoveCategory={(categoryToRemove) => setCategories(categories.filter(cat => cat !== categoryToRemove))}
           onSelectCategory={(selectedCategory) => {
             setCategory(selectedCategory);
             setIsCategoryOpen(false);
           }}
           onClose={() => setIsCategoryOpen(false)}
+        />
+      )}
+
+      {isAccountOpen && (
+        <KategoriAkun
+          currentCategory={account}
+          categories={accounts}
+          onAddCategory={(newAccount) => setAccounts([...accounts, newAccount])}
+          onRemoveCategory={(accountToRemove) => setAccounts(accounts.filter(acc => acc !== accountToRemove))}
+          onSelectCategory={(selectedAccount) => {
+            setAccount(selectedAccount);
+            setIsAccountOpen(false);
+          }}
+          onClose={() => setIsAccountOpen(false)}
         />
       )}
     </div>
