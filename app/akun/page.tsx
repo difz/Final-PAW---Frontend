@@ -48,7 +48,7 @@ export default function Akun() {
         <nav>
           <ul className="space-y-4">
             <li>
-              <Link href='/'>
+              <Link href='/dashboard'>
                 <span className="cursor-pointer">Dashboard</span>
               </Link>
             </li>
