@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function Login() {
+export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -13,27 +14,26 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/auth/login', {
+      const response = await fetch('http://localhost:5000/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include', // Include credentials (cookies)
+        body: JSON.stringify({ email, password, username }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Login failed');
+        throw new Error(errorData.message || 'Registration failed');
       }
 
       const data = await response.json();
       console.log(data.message); // Optional: Log success message
 
-      // Redirect to dashboard or another page
-      router.push('/dashboard');
+      // Redirect to login page
+      router.push('/');
     } catch (error: any) {
-      setError(error.message || 'Invalid email or password');
+      setError(error.message || 'An error occurred');
       console.error('Error:', error);
     }
   };
@@ -41,8 +41,18 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-80">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
         <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Email</label>
             <input
@@ -65,9 +75,9 @@ export default function Login() {
           </div>
           {error && <p className="text-red-500">{error}</p>}
           <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
-            Login
+            Register
           </button>
-          {error && <p className="mt-4 text-center">Don't have an account? <a href="/register" className="text-blue-500">Create one</a></p>}
+          {error && <p className="mt-4 text-center">Already have an account? <a href="/" className="text-blue-500">Login</a></p>}
         </form>
       </div>
     </div>

@@ -98,12 +98,12 @@ export default function Grafik() {
           <Image src="/logo.png" alt="Logo" width={50} height={50} />
           <h1 className="text-lg font-bold">Money+</h1>
         </div>
-        <nav className="mt-4">
-          <ul>
-            <li className="mb-2">
-              <Link href='/'>
-                <span className='cursor-pointer'>Dashboard</span>
-              </Link>
+        <nav>
+          <ul className="space-y-4">
+            <li>
+                <Link href = '/dashboard'>
+                    <span className='cursor-pointer'>Dashboard</span>
+                </Link>
             </li>
             <li className="mb-2 text-blue-600 font-bold">Grafik</li>
             <li className="mb-2">

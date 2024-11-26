@@ -1,102 +1,54 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 
-type HistoryItem = {
-  type: string; // "income" atau "spending"
-  categoryName: string;
-  dateReceived: string;
+type Transaction = {
+  _id: string;
+  account: string;
+  type: "income" | "expense";
+  category: string;
   amount: number;
+  date: string;
+  description?: string;
 };
 
 export default function Histori() {
-  const [historyData, setHistoryData] = useState<HistoryItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const currentDate = new Date();
-  const [selectedMonth, setSelectedMonth] = useState<string>(
-    (currentDate.getMonth() + 1).toString().padStart(2, "0")
-  ); 
-  const [selectedYear, setSelectedYear] = useState<string>(
-    currentDate.getFullYear().toString()
-  ); 
-
-  const months = [
-    { value: "01", label: "Januari" },
-    { value: "02", label: "Februai" },
-    { value: "03", label: "Maret" },
-    { value: "04", label: "April" },
-    { value: "05", label: "Mey" },
-    { value: "06", label: "Juni" },
-    { value: "07", label: "Juli" },
-    { value: "08", label: "Agustus" },
-    { value: "09", label: "September" },
-    { value: "10", label: "Oktober" },
-    { value: "11", label: "November" },
-    { value: "12", label: "Desember" },
-  ];
-
-  function generateYears(startYear: number, endYear: number): { value: string; label: string }[] {
-    const years = [];
-    for (let year = startYear; year <= endYear; year++) {
-      years.push({ value: year.toString(), label: year.toString() });
-    }
-    return years;
-  }
-
-  const years = generateYears(new Date().getFullYear() - 2, new Date().getFullYear() + 3);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchHistoryData = async () => {
+    const loadTransactions = async () => {
       try {
-        const response = await fetch("/api/history");
-        if (!response.ok) {
-          throw new Error("Failed to fetch history data");
-        }
-        const data = await response.json();
-
-        const sortedData = data.sort((a: HistoryItem, b: HistoryItem) => {
-          const [dayA, monthA, yearA] = a.dateReceived.split("/");
-          const [dayB, monthB, yearB] = b.dateReceived.split("/");
-
-          const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
-          const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
-
-          return dateB.getTime() - dateA.getTime();
+        const response = await fetch("http://localhost:5000/transaction/history", {
+          method: "GET",
+          credentials: "include", // Ensures cookies are sent with the request
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
 
-        setHistoryData(sortedData);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setTransactions(data.transactions);
       } catch (error: any) {
+        console.error("Failed to fetch transactions", error);
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchHistoryData();
+    loadTransactions();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  const formatRupiah = (amount: number): string => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 2,
-    }).format(amount);
-  };
-
-  const filteredData = historyData.filter((item) => {
-    const [day, month, year] = item.dateReceived.split("/");
-    return month === selectedMonth && year === selectedYear;
-  });
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="flex min-h-screen">
@@ -142,50 +94,25 @@ export default function Histori() {
       <main className="flex-1 p-8">
         <header className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold">Histori Cash Flow</h2>
-          <div className="flex space-x-4">
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="bg-orange-200 px-4 py-2 rounded"
-            >
-              {months.map((month) => (
-                <option key={month.value} value={month.value}>
-                  {month.label}
-                </option>
-              ))}
-            </select>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-              className="bg-orange-200 px-4 py-2 rounded"
-            >
-              {years.map((year) => (
-                <option key={year.value} value={year.value}>
-                  {year.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          <div className="bg-orange-200 px-4 py-2 rounded">{new Date().toLocaleString("en-US", { month: "long", year: "numeric" })}</div>
         </header>
 
         <section className="space-y-4">
-          {filteredData.length > 0 ? (
-            filteredData.map((item, index) => (
+          {transactions.length > 0 ? (
+            transactions.map((transaction) => (
               <div
-                key={index}
+                key={transaction._id}
                 className={`flex justify-between p-4 rounded ${
-                  item.type === "income" ? "bg-green-100" : "bg-red-100"
+                  transaction.type === "income" ? "bg-green-100" : "bg-red-100"
                 }`}
               >
-                <span className="flex-1">{item.categoryName}</span>
-                <span className="flex-1 text-center">{item.dateReceived}</span>
-                <span className="flex-1 text-right inline-flex justify-end">
-                  <span>{formatRupiah(item.amount)}</span>
-                </span>
+                <span>{transaction.category}</span>
+                <span>{new Date(transaction.date).toLocaleDateString()}</span>
+                <span>Rp.{transaction.amount.toLocaleString()}</span>
               </div>
             ))
           ) : (
-            <div>Tidak ada data untuk bulan ini.</div>
+            <div>No transactions found.</div>
           )}
         </section>
       </main>
