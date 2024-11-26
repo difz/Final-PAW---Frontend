@@ -2,16 +2,50 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Line } from 'react-chartjs-2';
 import ExpenseModal from '../popups/pengeluaran';
 import Pemasukan from '../popups/pemasukan';
-import Transfer from '../popups/Transfer'; // Import the Transfer component
+import Transfer from '../popups/Transfer';
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPemasukanOpen, setIsPemasukanOpen] = useState(false);
-  const [isTransferOpen, setIsTransferOpen] = useState(false); // State for Transfer modal
+  const [isTransferOpen, setIsTransferOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [chartData, setChartData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/transaction/history/label', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then(response => response.json())
+      .then(data => {
+        const dates = data.map((item: any) => item.date);
+        const income = data.map((item: any) => item.income);
+        const expenses = data.map((item: any) => item.expenses);
+
+        setChartData({
+          labels: dates,
+          datasets: [
+            {
+              label: 'Income',
+              data: income,
+              borderColor: 'green',
+              fill: false,
+            },
+            {
+              label: 'Expenses',
+              data: expenses,
+              borderColor: 'red',
+              fill: false,
+            },
+          ],
+        });
+      })
+      .catch(error => console.error('Error fetching chart data:', error));
+  }, []);
 
   const handleButtonClick = (item: string) => {
     if (item === "Pengeluaran") {
@@ -19,7 +53,7 @@ export default function Dashboard() {
     } else if (item === "Pemasukan") {
       setIsPemasukanOpen(true);
     } else if (item === "Transfer") {
-      setIsTransferOpen(true); // Open Transfer modal
+      setIsTransferOpen(true);
     }
   };
 
@@ -85,8 +119,11 @@ export default function Dashboard() {
         <section className="mb-8">
           <h2 className="text-2xl font-bold">Histori Cash Flow</h2>
           <div className="bg-blue-100 p-4 mt-4">
-            {/* Placeholder for chart */}
-            <div className="h-48 bg-white">Chart Placeholder</div>
+            {chartData ? (
+              <Line data={chartData} />
+            ) : (
+              <div className="h-48 bg-white">Loading chart...</div>
+            )}
           </div>
         </section>
 
@@ -112,7 +149,7 @@ export default function Dashboard() {
 
         <Pemasukan isOpen={isPemasukanOpen} onClose={() => setIsPemasukanOpen(false)} />
         <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-        <Transfer isOpen={isTransferOpen} onClose={() => setIsTransferOpen(false)} /> {/* Render Transfer modal */}
+        <Transfer isOpen={isTransferOpen} onClose={() => setIsTransferOpen(false)} />
 
         {isProfileOpen && (
           <div className="fixed top-16 right-16 bg-white p-4 shadow-lg rounded">

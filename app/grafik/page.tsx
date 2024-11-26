@@ -15,7 +15,6 @@ import {
   ArcElement,
 } from 'chart.js';
 
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -38,12 +37,19 @@ export default function Grafik() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch('/api/history');
-      if (res.ok) {
-        const data = await res.json();
-        setCashFlowData(data);
+      try {
+        const res = await fetch('/api/history');
+        if (res.ok) {
+          const data = await res.json();
+          setCashFlowData(data);
+        } else {
+          console.error('Failed to fetch data');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     fetchData();
   }, []);
@@ -57,20 +63,27 @@ export default function Grafik() {
   }
 
   const lineChartData = {
-    labels: cashFlowData.income.map((item) =>
-      new Date(item.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-    ),
+    labels: Array.from(new Set([
+      ...cashFlowData.income.map((item) => new Date(item.date).toLocaleDateString('en-US')),
+      ...cashFlowData.spending.map((item) => new Date(item.date).toLocaleDateString('en-US'))
+    ])).sort(),
     datasets: [
       {
         label: 'Income',
-        data: cashFlowData.income.map((item) => item.amount),
-        borderColor: 'blue',
+        data: cashFlowData.income.map((item) => ({
+          x: new Date(item.date).toLocaleDateString('en-US'),
+          y: item.amount,
+        })),
+        borderColor: 'green',
         fill: false,
       },
       {
         label: 'Spending',
-        data: cashFlowData.spending.map((item) => item.amount),
-        borderColor: 'yellow',
+        data: cashFlowData.spending.map((item) => ({
+          x: new Date(item.date).toLocaleDateString('en-US'),
+          y: item.amount,
+        })),
+        borderColor: 'red',
         fill: false,
       },
     ],
@@ -84,7 +97,7 @@ export default function Grafik() {
     datasets: [
       {
         data: [totalIncome, totalSpending],
-        backgroundColor: ['blue', 'yellow'],
+        backgroundColor: ['green', 'red'],
         hoverOffset: 4,
       },
     ],
@@ -92,7 +105,6 @@ export default function Grafik() {
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
       <aside className="w-64 bg-blue-100 p-4">
         <div className="mb-8">
           <Image src="/logo.png" alt="Logo" width={50} height={50} />
@@ -101,9 +113,9 @@ export default function Grafik() {
         <nav>
           <ul className="space-y-4">
             <li>
-                <Link href = '/dashboard'>
-                    <span className='cursor-pointer'>Dashboard</span>
-                </Link>
+              <Link href='/dashboard'>
+                <span className='cursor-pointer'>Dashboard</span>
+              </Link>
             </li>
             <li className="mb-2 text-blue-600 font-bold">Grafik</li>
             <li className="mb-2">
@@ -125,7 +137,6 @@ export default function Grafik() {
         </nav>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-8">
         <header className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold">Histori Cash Flow</h2>
@@ -133,7 +144,6 @@ export default function Grafik() {
 
         <section className="mb-8">
           <div className="bg-blue-100 p-8 rounded">
-            {/* Line Chart */}
             <div className="h-48 bg-white">
               <Line data={lineChartData} />
             </div>
@@ -143,7 +153,6 @@ export default function Grafik() {
         <section>
           <h3 className="text-xl font-bold mb-4">Breakdown</h3>
           <div className="bg-blue-100 p-8 rounded">
-            {/* Pie Chart */}
             <div className="h-48 bg-white">
               <Pie data={pieChartData} />
             </div>
