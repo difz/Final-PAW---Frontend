@@ -1,16 +1,37 @@
-// pages/api/example.ts
+// pages/api/cashflow.ts
 
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '../../lib/mongodb';
+import mongoose from 'mongoose';
+import Income from '../../app/models/income';
+
+import Spending from '../../app/models/spending';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  await clientPromise; // memastikan MongoDB terkoneksi
+
+  // Mengambil data dari koleksi Income dan Spending
   try {
-    const client = await clientPromise;
-    const db = client.db('mydatabase'); // Ganti dengan nama database Anda
+    // Menyambung ke database menggunakan Mongoose
+    await mongoose.connect(process.env.MONGODB_URI as string);
 
-    const data = await db.collection('mycollection').find({}).toArray(); // Ganti dengan nama koleksi Anda
+    // Ambil data Income dan Spending
+    const incomeData = await Income.find({}).sort({ dateReceived: 1 });
+    const spendingData = await Spending.find({}).sort({ dateReceived: 1 });
 
-    res.status(200).json(data);
+    // Format data untuk grafik
+    const formattedData = {
+      income: incomeData.map((item) => ({
+        date: item.dateReceived,
+        amount: item.amount,
+      })),
+      spending: spendingData.map((item) => ({
+        date: item.dateReceived,
+        amount: item.amount,
+      })),
+    };
+
+    res.status(200).json(formattedData);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch data' });
   }
