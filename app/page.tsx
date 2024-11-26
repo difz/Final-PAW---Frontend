@@ -22,7 +22,8 @@ export default function Login() {
       });
 
       if (!response.ok) {
-        throw new Error('Login failed');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
       }
 
       const data = await response.json();
@@ -30,8 +31,8 @@ export default function Login() {
 
       // Redirect to dashboard or another page
       router.push('/dashboard');
-    } catch (error) {
-      setError('Invalid email or password');
+    } catch (error: any) {
+      setError(error.message || 'Invalid email or password');
       console.error('Error:', error);
     }
   };
@@ -65,6 +66,7 @@ export default function Login() {
           <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
             Login
           </button>
+          {error && <p className="mt-4 text-center">Don't have an account? <a href="/register" className="text-blue-500">Create one</a></p>}
         </form>
       </div>
     </div>
