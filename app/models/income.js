@@ -19,4 +19,7 @@ const incomeSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Income', incomeSchema);
+// Cek apakah model "Income" sudah ada, jika ya, gunakan model yang sudah ada. Jika tidak, buat model baru.
+const Income = mongoose.models.Income || mongoose.model('Income', incomeSchema);
+
+export default Income;
