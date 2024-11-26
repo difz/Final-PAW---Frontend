@@ -5,10 +5,12 @@ import Link from "next/link";
 import React, { useState } from 'react';
 import ExpenseModal from '../popups/pengeluaran';
 import Pemasukan from '../popups/pemasukan';
+import Transfer from '../popups/Transfer'; // Import the Transfer component
 
 export default function Dashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPemasukanOpen, setIsPemasukanOpen] = useState(false);
+  const [isTransferOpen, setIsTransferOpen] = useState(false); // State for Transfer modal
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const handleButtonClick = (item: string) => {
@@ -16,6 +18,8 @@ export default function Dashboard() {
       setIsModalOpen(true);
     } else if (item === "Pemasukan") {
       setIsPemasukanOpen(true);
+    } else if (item === "Transfer") {
+      setIsTransferOpen(true); // Open Transfer modal
     }
   };
 
@@ -108,6 +112,7 @@ export default function Dashboard() {
 
         <Pemasukan isOpen={isPemasukanOpen} onClose={() => setIsPemasukanOpen(false)} />
         <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        <Transfer isOpen={isTransferOpen} onClose={() => setIsTransferOpen(false)} /> {/* Render Transfer modal */}
 
         {isProfileOpen && (
           <div className="fixed top-16 right-16 bg-white p-4 shadow-lg rounded">
