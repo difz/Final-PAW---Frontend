@@ -1,124 +1,72 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import React, { useState } from 'react';
-import ExpenseModal from './popups/pengeluaran';
-import Pemasukan from './popups/pemasukan';
+import { useRouter } from 'next/navigation';
 
-export default function Dashboard() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPemasukanOpen, setIsPemasukanOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
 
-  const handleButtonClick = (item: string) => {
-    if (item === "Pengeluaran") {
-      setIsModalOpen(true);
-    } else if (item === "Pemasukan") {
-      setIsPemasukanOpen(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:5000/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+
+      const data = await response.json();
+      console.log(data.message); // Optional: Log success message
+
+      // Redirect to dashboard or another page
+      router.push('/dashboard');
+    } catch (error) {
+      setError('Invalid email or password');
+      console.error('Error:', error);
     }
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-blue-100 p-4">
-        <div className="mb-8">
-          <Image src="https://assets.maia.id/1e81b035-1ab1-47f6-a8ff-fdbb079120e7.png" alt="Logo" width={50} height={50} />
-          <h1 className="text-lg font-bold">Money+</h1>
-        </div>
-        <nav>
-          <ul className="space-y-4">
-            <li className="text-blue-600 font-bold">Dashboard</li>
-            <li>
-              <Link href='/grafik'>
-                <span className="cursor-pointer"> Grafik</span>
-              </Link>
-            </li>
-            <li>
-              <Link href='/histori'>
-                <span className="cursor-pointer"> Histori</span>
-              </Link>
-            </li>
-            <li>
-              <Link href='/plan'>
-                <span className="cursor-pointer"> Plan</span>
-              </Link>
-            </li>
-            <li>
-              <Link href='/akun'>
-                <span className="cursor-pointer"> Akun</span>
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 p-8">
-        <header className="mb-8 flex justify-between">
-          <div className="flex space-x-4">
-            {["Pengeluaran", "Pemasukan", "Transfer", "Planning", "Akun"].map((item) => (
-              <button
-                key={item}
-                className="bg-orange-200 px-4 py-2 rounded"
-                onClick={() => handleButtonClick(item)}
-              >
-                {item}
-              </button>
-            ))}
-            <Link href="/pembayaran" className="bg-orange-200 px-4 py-2 rounded">
-              Pembayaran
-            </Link>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded shadow-md w-80">
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-2 border rounded"
+              required
+            />
           </div>
-          <div className="flex items-center">
-            <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="p-2">
-              <Image src="" alt="Profile" width={32} height={32} />
-            </button>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-2 border rounded"
+              required
+            />
           </div>
-        </header>
-
-        <section className="mb-8">
-          <h2 className="text-2xl font-bold">Histori Cash Flow</h2>
-          <div className="bg-blue-100 p-4 mt-4">
-            {/* Placeholder for chart */}
-            <div className="h-48 bg-white">Chart Placeholder</div>
-          </div>
-        </section>
-
-        <section>
-          <div className="space-y-4">
-            <div className="flex justify-between bg-green-100 p-4 rounded">
-              <span>Nama Pemasukan</span>
-              <span>1/1/2024</span>
-              <span>Rp.100.000</span>
-            </div>
-            <div className="flex justify-between bg-red-100 p-4 rounded">
-              <span>Nama Pengeluaran</span>
-              <span>1/1/2024</span>
-              <span>Rp.100.000</span>
-            </div>
-            <div className="flex justify-between bg-green-100 p-4 rounded">
-              <span>Nama Pemasukan</span>
-              <span>1/1/2024</span>
-              <span>Rp.100.000</span>
-            </div>
-          </div>
-        </section>
-
-        <Pemasukan isOpen={isPemasukanOpen} onClose={() => setIsPemasukanOpen(false)} />
-        <ExpenseModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
-        {isProfileOpen && (
-          <div className="fixed top-16 right-16 bg-white p-4 shadow-lg rounded">
-            <h3 className="font-bold">Profile</h3>
-            <p>Profile details go here...</p>
-            <button onClick={() => setIsProfileOpen(false)} className="mt-2 bg-red-500 text-white px-2 py-1 rounded">
-              Close
-            </button>
-          </div>
-        )}
-      </main>
+          {error && <p className="text-red-500">{error}</p>}
+          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
