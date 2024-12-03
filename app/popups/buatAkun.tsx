@@ -35,8 +35,12 @@ const BuatAkun: React.FC<BuatAkunProps> = ({ isOpen, onClose }) => {
       onClose();
       setAccountName('');
       setAmount('');
-    } catch (error: any) {
-      setError(error.message || 'An error occurred');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message || 'An error occurred');
+      } else {
+        setError('An unexpected error occurred');
+      }
       console.error('Error:', error);
     }
   };

@@ -32,7 +32,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
 
     res.status(200).json(formattedData);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch data' });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message); // Log the error message
+      res.status(500).json({ error: `Failed to fetch data: ${error.message}` });
+    } else {
+      // Handle the case where error is not an instance of Error (for example, a string or unknown object)
+      res.status(500).json({ error: 'Failed to fetch data: Unknown error' });
+    }
   }
+  
 }

@@ -10,10 +10,10 @@ const Transfer: React.FC<TransferProps> = ({ isOpen, onClose }) => {
   const [fromAccount, setFromAccount] = useState('Cash');
   const [toAccount, setToAccount] = useState('Mandiri');
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
-    setAmount(formatNumber(value));
-  };
+  // const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+  //   setAmount(formatNumber(value));
+  // };
 
   const formatNumber = (value: string) => {
     return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add thousand separators

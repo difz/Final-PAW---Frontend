@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -32,8 +33,12 @@ export default function Register() {
 
       // Redirect to login page
       router.push('/');
-    } catch (error: any) {
-      setError(error.message || 'An error occurred');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message || 'An error occurred');
+      } else {
+        setError('An unknown error occurred');
+      }
       console.error('Error:', error);
     }
   };
@@ -77,7 +82,12 @@ export default function Register() {
           <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
             Register
           </button>
-          {error && <p className="mt-4 text-center">Already have an account? <a href="/" className="text-blue-500">Login</a></p>}
+          {error && <p className="mt-4 text-center">
+    Already have an account?{' '}
+    <Link href="/" className="text-blue-500">
+      Login
+    </Link>
+  </p>}
         </form>
       </div>
     </div>

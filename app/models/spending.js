@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const spendingSchema = new mongoose.Schema({
     category_id: {
@@ -19,4 +19,7 @@ const spendingSchema = new mongoose.Schema({
     },
 });
 
-module.exports = mongoose.model('Spending', spendingSchema);
+//module.exports = mongoose.model('Spending', spendingSchema);
+const Spending = mongoose.models.Spending || mongoose.model('Spending', spendingSchema);
+
+export default Spending;

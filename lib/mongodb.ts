@@ -2,13 +2,7 @@
 
 import { MongoClient } from 'mongodb';
 
-// Tambahkan ini di awal file mongodb.ts atau di global.d.ts
-
-declare global {
-    var _mongoClientPromise: Promise<MongoClient>;
-  }
-  
-const uri = process.env.MONGODB_URI as string; // Pastikan Anda memiliki variabel lingkungan ini
+const uri = process.env.MONGODB_URI as string; // Make sure you have this environment variable
 const options = {};
 
 let client;

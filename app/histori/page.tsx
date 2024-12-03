@@ -36,9 +36,12 @@ export default function Histori() {
 
         const data = await response.json();
         setTransactions(data.transactions);
-      } catch (error: any) {
-        console.error("Failed to fetch transactions", error);
-        setError(error.message);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }

@@ -13,7 +13,15 @@ export default function Dashboard() {
   const [isPemasukanOpen, setIsPemasukanOpen] = useState(false);
   const [isTransferOpen, setIsTransferOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [chartData, setChartData] = useState<any>(null);
+  const [chartData, setChartData] = useState<{
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      borderColor: string;
+      fill: boolean;
+    }[];
+  } | null>(null);
 
   useEffect(() => {
     fetch('http://localhost:5000/transaction/history/label', {
@@ -21,10 +29,10 @@ export default function Dashboard() {
       credentials: 'include',
     })
       .then(response => response.json())
-      .then(data => {
-        const dates = data.map((item: any) => item.date);
-        const income = data.map((item: any) => item.income);
-        const expenses = data.map((item: any) => item.expenses);
+      .then((data : TransactionData[]) => {
+        const dates = data.map((item) => item.date);
+        const income = data.map((item) => item.income);
+        const expenses = data.map((item) => item.expenses);
 
         setChartData({
           labels: dates,
@@ -163,4 +171,10 @@ export default function Dashboard() {
       </main>
     </div>
   );
+}
+
+interface TransactionData {
+  date: string;
+  income: number;
+  expenses: number;
 }

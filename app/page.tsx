@@ -32,9 +32,12 @@ export default function Login() {
 
       // Redirect to dashboard or another page
       router.push('/dashboard');
-    } catch (error: any) {
-      setError(error.message || 'Invalid email or password');
-      console.error('Error:', error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message || 'Invalid email or password');
+      } else {
+        setError('An unexpected error occurred');
+      }
     }
   };
 
@@ -67,7 +70,7 @@ export default function Login() {
           <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
             Login
           </button>
-          {error && <p className="mt-4 text-center">Don't have an account? <a href="/register" className="text-blue-500">Create one</a></p>}
+          {error && <p className="mt-4 text-center">Don&apos;t have an account?{' '}<a href="/register" className="text-blue-500">Create one</a></p>}
         </form>
       </div>
     </div>
