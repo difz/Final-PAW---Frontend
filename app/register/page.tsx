@@ -15,7 +15,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://financify-backend.vercel.app/auth/register', {
+      const response = await fetch('https://api.financify.my.id/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://financify-backend.vercel.app/auth/login', {
+      const response = await fetch('https://api.financify.my.id/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

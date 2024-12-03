@@ -38,7 +38,7 @@ const Pemasukan: React.FC<PemasukanProps> = ({ isOpen, onClose }) => {
     };
 
     try {
-      const response = await fetch('https://financify-backend.vercel.app/transaction/create', {
+      const response = await fetch('https://api.financify.my.id/transaction/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

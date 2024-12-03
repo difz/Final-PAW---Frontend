@@ -14,7 +14,7 @@ const BuatAkun: React.FC<BuatAkunProps> = ({ isOpen, onClose }) => {
 
   const handleCreateAccount = async () => {
     try {
-      const response = await fetch('https://financify-backend.vercel.app/account/create', {
+      const response = await fetch('https://api.financify.my.id/account/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

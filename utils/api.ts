@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const backendAPI = axios.create({
-  baseURL: "https://financify-backend.vercel.app", // Replace with your backend's base URL
+  baseURL: "https://api.financify.my.id", // Replace with your backend's base URL
   headers: {
     "Content-Type": "application/json",
   },
