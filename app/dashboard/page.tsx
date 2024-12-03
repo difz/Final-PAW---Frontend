@@ -24,7 +24,7 @@ export default function Dashboard() {
   } | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/transaction/history/label', {
+    fetch('https://financify-backend.vercel.app/transaction/history/label', {
       method: 'GET',
       credentials: 'include',
     })

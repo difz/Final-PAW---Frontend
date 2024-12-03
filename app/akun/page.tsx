@@ -17,7 +17,7 @@ export default function Akun() {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/account/all', {
+        const response = await fetch('https://financify-backend.vercel.app/account/all', {
           credentials: 'include', // Include credentials to send cookies
         });
   

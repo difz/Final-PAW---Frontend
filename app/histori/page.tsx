@@ -22,7 +22,7 @@ export default function Histori() {
   useEffect(() => {
     const loadTransactions = async () => {
       try {
-        const response = await fetch("http://localhost:5000/transaction/history", {
+        const response = await fetch("https://financify-backend.vercel.app/transaction/history", {
           method: "GET",
           credentials: "include", // Ensures cookies are sent with the request
           headers: {
