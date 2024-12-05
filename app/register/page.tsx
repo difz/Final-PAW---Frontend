@@ -15,7 +15,7 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://api.financify.my.id/auth/register', {
+      const response = await fetch('https://api.financify.web.id/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

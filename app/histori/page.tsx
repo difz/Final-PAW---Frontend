@@ -22,7 +22,7 @@ export default function Histori() {
   useEffect(() => {
     const loadTransactions = async () => {
       try {
-        const response = await fetch("https://api.financify.my.id/transaction/history", {
+        const response = await fetch("https://api.financify.web.id/transaction/history", {
           method: "GET",
           credentials: "include", // Ensures cookies are sent with the request
           headers: {

@@ -38,7 +38,7 @@ const Pengeluaran: React.FC<PengeluaranProps> = ({ isOpen, onClose }) => {
     };
 
     try {
-      const response = await fetch('https://api.financify.my.id/transaction/create', {
+      const response = await fetch('https://api.financify.web.id/transaction/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
