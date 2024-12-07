@@ -38,13 +38,13 @@ export default function Dashboard() {
           labels: dates,
           datasets: [
             {
-              label: 'Income',
+              label: 'income',
               data: income,
               borderColor: 'green',
               fill: false,
             },
             {
-              label: 'Expenses',
+              label: 'expenses',
               data: expenses,
               borderColor: 'red',
               fill: false,
