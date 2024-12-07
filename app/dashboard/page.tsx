@@ -24,7 +24,7 @@ export default function Dashboard() {
   } | null>(null);
 
   useEffect(() => {
-    fetch('https://api.financify.web.id/transaction/history/', {
+    fetch('https://api.financify.web.id/transaction/history', {
       method: 'GET',
       credentials: 'include',
     })
