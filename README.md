@@ -42,4 +42,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - Backend Repository: [Financify Backend](https://github.com/difz/Financify-Backend.git)
 - Project Presentation: [Canva Presentation](https://www.canva.com/design/DAGRuLU8kSo/P-5m79sNPlD04lnjYX4low/edit?utm_content=DAGRuLU8kSo&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 - Presentation Video: [Watch the Presentation](https://drive.google.com/drive/folders/14DNFFk0ZjDEds73u13eqp97ANOq3EVzv)
-- Link Web: [Web app](financify.my.id)
+- Link Web: [Web app](financify.web.id)
